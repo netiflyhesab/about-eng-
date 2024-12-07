@@ -1,0 +1,653 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+    <link rel="Website icon" href="https://uxwing.com/wp-content/themes/uxwing/download/web-app-development/link-hyperlink-icon.png">
+    <title>Link.az</title>
+
+    <style>
+        *{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+} 
+body{
+  background-color: #303030;
+}
+nav{
+  position: fixed;
+  display: flex;
+  height: 80px;
+  width: 100%;
+  background: #1b1b1b;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 50px 0 100px;
+  flex-wrap: wrap;
+}
+nav .logo{
+  color: #fff;
+  font-size: 35px;
+  font-weight: 600;
+}
+nav ul{
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+}
+nav ul li{
+  margin: 0 5px;
+}
+nav ul li a{
+  color: #f2f2f2;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 8px 15px;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+nav ul li a.active,
+nav ul li a:hover{
+  color: #111;
+  background: #fff;
+}
+nav .menu-btn i{
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  display: none;
+}
+input[type="checkbox"]{
+  display: none;
+}
+@media (max-width: 750px){
+  nav{
+    padding: 0 40px 0 50px;
+  }
+}
+@media (max-width: 750px) {
+  nav .menu-btn i{
+    display: block;
+  }
+  #click:checked ~ .menu-btn i:before{
+    content: "\f00d";
+  }
+  nav ul{
+    position: fixed;
+    top: 80px;
+    left: -100%;
+    background: #111;
+    height: 100vh;
+    width: 100%;
+    text-align: center;
+    display: block;
+    transition: all 0.3s ease;
+  }
+  #click:checked ~ ul{
+    left: 0;
+  }
+  nav ul li{
+    width: 100%;
+    margin: 40px 0;
+  }
+  nav ul li a{
+    width: 100%;
+    margin-left: -100%;
+    display: block;
+    font-size: 20px;
+    transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  #click:checked ~ ul li a{
+    margin-left: 0px;
+  }
+  nav ul li a.active,
+  nav ul li a:hover{
+    background: none;
+    color: cyan;
+  }
+}
+
+.content{
+    width: 100%;
+    display: flex;
+   
+    
+}
+.resm{
+    background: url("data:image/png;base64,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");
+    background-size: cover;
+    background-position: center;
+    justify-content: center;
+    border-radius: 100%;
+    margin-left: 55px;
+    margin-top: 70px;
+    width: 500px;
+    height: 500px;
+}
+.contact{
+    margin-top: 120px;
+    margin-left: 70px;
+    width: 55%;
+
+}
+.esas{
+font-size: 60px;
+color: wheat;
+}
+.son{
+    font-size: 30px;
+    color: wheat;
+}
+.hr{
+    color: #111;
+}
+@media only screen and (max-width: 760px){
+            .resm{
+              
+               display: none;
+                
+                
+       }
+}
+
+
+@media only screen and (max-width: 2000px){
+            .contact{
+                justify-content: left;
+                text-align: left;
+                width: 100px;
+                margin-left: 1px;
+                
+                
+       }
+}
+
+/*chatbot*/
+
+
+.chat-header a{
+    text-decoration:none;
+    color: white;
+}
+
+.copyright{
+    font-size:12px;
+    text-align: center;
+}
+
+.copyright a {
+    text-decoration:none;
+    color: #343c41;
+}
+.i{
+  font-size: 23px;
+}
+#chatbot-toggle-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 17px 17px;
+    border: none;
+    background: linear-gradient(120deg,#0559b2,#ca9809);
+    color: #fff;
+    border-radius: 100%;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1001; /* Ensure the button is above the chatbot popup */
+}
+
+
+
+.chatbot-popup {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background-color: #303030;
+    border-radius: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    max-width: 90%;
+    z-index: 1000;
+}
+
+.chat-header {
+    background-color: black;
+    color: #fff;
+    padding: 15px 20px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#close-btn {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.chat-box {
+    max-height: 350px;
+    overflow-y: auto;
+    padding: 15px 20px;
+}
+
+.chat-input {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-top: 1px solid #ddd;
+}
+
+#user-input {
+    font-family: "Poppins";
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    outline: none;
+}
+
+#send-btn {
+    font-family: "Poppins", sans-serif;
+    padding: 10px 20px;
+    border: none;
+    background: linear-gradient(120deg,#0559b2,#ca9809);
+    color: #fff;
+    border-radius: 12px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#send-btn:hover {
+    background-color: #0074CC;
+}
+
+.user-message {
+    background-color: #f3f3f3;
+    color: #333;
+    padding: 14px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    margin-left: 10px; /* Push user message to the left */
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse; /* Move user message to the right */
+}
+
+.user-message::before {
+    
+    position: absolute;
+    bottom: -17px;
+    right: -20px;
+    margin-bottom: 7px;
+    font-size: 20px;
+    background-color: red;
+    color: #fff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.bot-message {
+    background-color: black;
+    color: #fff;
+    padding: 14px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+    align-self: flex-start; /* Move bot message to the left */
+    margin-right: 10px; /* Push bot message to the right */
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column; /* Adjust for button placement */
+}
+
+.bot-message::before {
+    
+    width: 20px;
+    position: absolute;
+    bottom: -17px;
+    left: -14px;
+    margin-bottom: 4px;
+    font-size: 20px;
+    background-color: red;
+    color: #fff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.button-container button {
+    padding: 10px 50px;
+    border: none;
+    background-color: red;
+    color: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button-container button:hover {
+    background-color: red;
+}
+
+
+
+/*language*/
+
+#lang{
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 12px 12px;
+    border: none;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    background: linear-gradient(100deg,#0559b2,#ca9809);
+
+
+}
+#lg{
+   
+    position: fixed;
+    
+    left: 20px;
+    background: linear-gradient(100deg,#0559b2,#ca9809);
+    border-radius: 10px;
+    color: white;
+    bottom:67px;
+    display: none;
+}
+li{
+    list-style: none;
+    padding: 12px 12px;
+    cursor: pointer;
+    border-radius: 10px;
+    
+}
+.es:hover{
+    background-color: #343c40;
+    transition: 0.3s;
+}
+img{
+    width: 16px;
+    border-radius: 100%;
+    height: 16px;
+}
+.a{
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+input{
+  padding: 10px 10px;
+  border-radius: 20px;  
+  margin-top: 10px;
+  width: 85%; 
+}
+.contact{
+    margin-top: 100px;
+    margin-left: 5px;
+    width: 400px;
+    height: 400px;
+    background-color:#191923;
+    justify-content: center;
+    text-align: center;
+    border-radius: 15px;
+
+
+}
+.mz{
+  padding-bottom: 150px;
+
+  
+}
+.btn{
+  padding: 10px 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  width: 85%;
+
+}
+.btn :hover{
+  background-color: #191923;
+  color: white;
+}
+
+
+</style>
+
+</head>
+<body>
+    <nav>
+        <div class="logo"><i class="fa-solid fa-link"></i>Link.az</div>
+        <input type="checkbox" id="click">
+        <label for="click" class="menu-btn">
+          <i class="fas fa-bars"></i>
+        </label>
+        <ul>
+          <li><a  href="">Home</a></li>
+          <li><a  href="">Textbook</a></li>
+          <li><a href="">Novels</a></li>
+          <li><a class="active" href="#">Contact</a></li>
+          
+        </ul>
+    </nav>
+    <br>
+      
+    <br>
+    <br> 
+      <br>
+      <br>
+
+    <div class="content">
+       
+        <div class="resm">
+
+        </div>
+        
+        <div class="contact">
+          <br>
+          <form action="https://api.web3forms.com/submit" method="POST">
+
+            <!-- Replace with your Access Key -->
+            <input type="hidden" name="access_key" value="1dd9e835-dd69-4405-a457-dfe2441b7f37">
+        
+            <!-- Form Inputs. Each input must have a name="" attribute -->
+            <input type="text" name="name" placeholder="Your name" required><br>
+            <input type="email" name="E-mail"  placeholder="Email address"required><br>
+            <input class="mz" type="text" name="Mövzu"  placeholder="The subject..." required>
+           
+        
+            <!-- Honeypot Spam Protection -->
+            <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+        
+            <!-- Custom Confirmation / Success Page -->
+            <!-- <input type="hidden" name="redirect" value="https://mywebsite.com/thanks.html"> -->
+        <br>
+        
+           <br> <button class="btn" type="submit">Send</button>
+        </form> </div>
+    </div>
+
+
+
+    <button id="lang" onclick="hide()"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/2560px-Flag_of_the_United_Kingdom_%283-5%29.svg.png"><b>    ENG</b></button>
+    <div id="lg">
+        <div class="diller">
+            <li class="es"><img src="https://aztc.gov.az/uploads/flag.jpg"><a href="" class="a"<b>     AZE</b></a></li>
+           
+        </div>
+    </div>
+
+
+    <button id="chatbot-toggle-btn"><i class="fas fa-link"></i></button>
+    <div class="chatbot-popup" id="chatbot-popup">
+        <div class="chat-header">
+            <span>Link.az</a></span>
+            <button id="close-btn">&times;</button>
+        </div>
+        <div class="chat-box" id="chat-box"></div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type a message...">
+            <button id="send-btn">Send</button>
+        </div>
+     
+<script>
+
+    //language
+
+    function hide() {
+          var x = document.getElementById("lg")
+          if(x.style.display ==="block"){
+            x.style.display = "none";
+          }
+          else{
+            x.style.display = "block";
+          }
+        }
+   //chatbot
+
+   const responses = {
+   "hi": "Hello! How can I help you today?",
+    "hello": "Hello! How can I help you today?",
+    "coding hubs": "Here you will get Notes, Ebooks, project source Code, Interview questions. visit Coding Hubs.<a href='https://thecodinghubs.com' target='_blank'>Visit Website</a>",
+    "how are you": "I'm just a robot, but I'm here to help you!",
+    "help": "How can I help you today?",
+    "thank": "Goodbye! Have a nice day!",
+    "thank you": "Goodbye! Have a nice day!",
+    "bye": "Goodbye! Have a nice day!",
+    "default": "Sorry, I didn't understand it, please write in English",
+    "No": "Well, if you change your mind, let me know!",
+    "how can i download books": "A very simple! click of the 'yüklə' button",
+     "how can ı download books": "A very simple! click of the 'yüklə' button",
+     "how ı download books": "A very simple! click of the 'yüklə' button",
+     "how to download books": "A very simple! click of the 'yüklə' button",
+     "download books": "A very simple! click of the 'yüklə' button",
+     "download book": "A very simple! click of the 'yüklə' button",
+     "download": "A very simple! click of the 'yüklə' button",
+     "downloads": "A very simple! click of the 'yüklə' button",
+     "how to download book": "A very simple! click of the 'yüklə' button",
+     "how ı download book": "A very simple! click of the 'yüklə' button",
+     "how can ı download book": "A very simple! click of the 'yüklə' button",
+     "how  i download books": "A very simple! click of the 'yüklə' button",
+     "how download": "A very simple! click of the 'yüklə' button",
+     "Who was the creator?": "Farid Mammadli",
+     "who is creator": "Farid Mammadli",
+     "creator?": "Farid Mammadli",
+     "creator": "Farid Mammadli",
+     "who is creator?": "Farid Mammadli",
+     "who creator?": "Farid Mammadli",
+     "who is he?": "Farid Mammadli",
+     "44 gün": "This book tells about the stories that happened on the eve of the 44-day war.",
+     "Kötü k": "With extraordinary tension and fluidity, Seven Days in Mayis is a masterpiece full of overwhelming suspense. A work that shows how a destructive military conspiracy was made.",
+     "YAradıcı": "Farid Mammadli is the creator of this site",
+     "Who was": "Farid Mammadli is the creator of this site",
+     "You are stupid": "I think you are stupid",
+     "02,06": "You are very beautiful :)",
+     "stupid": "I think you are stupid"
+
+
+
+
+
+
+};
+
+document.getElementById('chatbot-toggle-btn').addEventListener('click', toggleChatbot);
+document.getElementById('close-btn').addEventListener('click', toggleChatbot);
+document.getElementById('send-btn').addEventListener('click', sendMessage);
+document.getElementById('user-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
+
+function toggleChatbot() {
+    var chatbotPopup = document.getElementById('chatbot-popup')
+    if (chatbotPopup.style.display === "block"){
+      chatbotPopup.style.display = "none";
+    }
+    else{
+      chatbotPopup.style.display = "block";
+    }
+    
+}
+
+function sendMessage() {
+    const userInput = document.getElementById('user-input').value.trim();
+    if (userInput !== '') {
+        appendMessage('user', userInput);
+        respondToUser(userInput.toLowerCase());
+        document.getElementById('user-input').value = '';
+    }
+}
+
+function respondToUser(userInput) {
+    const response = responses[userInput] || responses["default"];
+    setTimeout(function() {
+        appendMessage('bot', response);
+    }, 500);
+}
+
+function appendMessage(sender, message) {
+    const chatBox = document.getElementById('chat-box');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+    messageElement.innerHTML = message;
+    chatBox.appendChild(messageElement);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    if (sender === 'bot' && message === responses["default"]) {
+        
+       
+        buttonYes.onclick = function() {
+            appendMessage('bot', responses["expert"]);
+        };
+        const buttonNo = document.createElement('button');
+        
+        buttonNo.onclick = function() {
+            appendMessage('bot', responses["no"]);
+        };
+        const buttonContainer = document.createElement('div');
+        buttonContainer.classList.add('button-container');
+        buttonContainer.appendChild(buttonYes);
+        buttonContainer.appendChild(buttonNo);
+        chatBox.appendChild(buttonContainer);
+    }
+}
+</script>
+</body>
+</html>
